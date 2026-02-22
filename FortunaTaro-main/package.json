@@ -1,0 +1,9 @@
+{
+  "name": "ai-fortuna",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@upstash/redis": "^1.31.5",
+    "groq-sdk": "^0.7.0"
+  }
+}

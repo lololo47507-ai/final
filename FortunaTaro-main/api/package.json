@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "groq-sdk": "^0.7.0",
+    "@upstash/redis": "^1.31.5"
+  }
+}

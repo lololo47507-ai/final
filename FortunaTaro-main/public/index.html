@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>AI Fortuna • Taro App</title>
+  <!-- ИЗМЕНЕНИЕ №1: Версия обновлена для сброса кэша стилей -->
+  <link rel="stylesheet" href="/styles.css?v=1.7">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <!-- Animated particles container -->
+  <div class="particles-container">
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- Шапка -->
+    <div class="header">
+      <div class="brand">
+        <div class="logo">
+          <div class="galaxy-ball">
+            <div class="galaxy-ball-reflections"></div>
+            <div class="galaxy-ball-stars"></div>
+            <div class="galaxy-ball-vortex"></div>
+          </div>
+        </div>
+        <div>
+          <div class="title">AI Fortuna</div>
+          <div class="muted tiny" id="hello">@user</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="row tabs" style="margin:8px 2px 12px 2px">
+      <div class="tab active" data-page="home">Главная</div>
+      <div class="tab" data-page="horoscope">Гороскоп</div>
+      <div class="tab" data-page="ai">ИИ Чат</div>
+    </div>
+
+    <!-- Page: Home -->
+    <section class="page active" id="page-home">
+      <!-- Referral System Block -->
+      <div class="card pad" id="referral-block">
+        <h2>✨ Пригласи друга</h2>
+        <p class="muted tiny" style="margin-top:-8px; margin-bottom:12px;">Вы и ваш друг получите по 11 бесплатных сообщений!</p>
+        <div class="ref-link-wrapper">
+          <input type="text" id="refLink" readonly value="Загрузка ссылки...">
+          <button class="btn" id="copyRefBtn">Копировать</button>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="glass" style="margin-top:12px;">
+        <div class="section-header">
+          <h2>Быстрые действия</h2>
+          <div class="pill" id="clock">--:--</div>
+        </div>
+        <div class="actions" style="margin-top:8px">
+          <div class="action" data-act="card_of_day"><div class="ico">🃏</div>Карта дня</div>
+          <div class="action" data-act="three"><div class="ico">🔮</div>3 карты</div>
+          <div class="action" data-act="week"><div class="ico">📅</div>Неделя</div>
+          <div class="action" data-act="yes_no"><div class="ico">❓</div>Оракул Да/Нет</div>
+          <div class="action action-full-width" data-act="magic_ball"><div class="ico">🎱</div>Магический шар - бесплатно</div>
+        </div>
+      </div>
+
+      <!-- Standalone History Button Block -->
+      <div class="standalone-action-wrapper">
+        <div class="action" id="historyBtn"><div class="ico">📖</div>История раскладов</div>
+      </div>
+
+      <!-- Spread constructor -->
+      <div class="card pad" style="margin-top:12px">
+        <h2>Конструктор расклада</h2>
+        <div class="row">
+          <span class="muted">Кол-во карт:</span>
+          <input id="cardsRange" type="range" min="2" max="10" value="3">
+          <span class="pill" id="cardsOut">3</span>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <input id="topicInput" type="text" placeholder="Тема/вопрос (необязательно)" style="flex:1;min-width:220px">
+          <button class="btn primary" id="btnDoCustom">Сделать расклад</button>
+        </div>
+      </div>
+      
+      <!-- Fast topics -->
+      <div class="card pad" style="margin-top:12px">
+        <h3>Быстрые расклады</h3>
+        <div class="fast-topics-grid">
+            <button class="btn ghost fast" data-n="5" data-topic="Отношения и любовь">💞 Отношения</button>
+            <button class="btn ghost fast" data-n="5" data-topic="Карьера и работа">💼 Работа</button>
+            <button class="btn ghost fast" data-n="5" data-topic="Финансы и доходы">💰 Финансы</button>
+            <button class="btn ghost fast" data-n="4" data-topic="Личностный рост">🌿 Рост</button>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:12px">
+        <!-- Daily card subscription -->
+        <div class="card pad">
+          <h3>Подписка «Карта дня»</h3>
+          <div class="row" style="margin-top:6px"> <span class="muted">Время:</span> <input id="codTime" type="time" value="09:00"></div>
+          <label class="row" style="gap:6px; margin-top:8px;"><input id="codToggle" type="checkbox" checked>Включить</label>
+          <div class="row" style="margin-top:10px"> <button class="btn" id="btnCodSave">Сохранить</button> </div>
+        </div>
+
+        <!-- Promo -->
+        <div class="card pad">
+          <h3>Промокод</h3>
+          <div class="row" style="margin-top:6px">
+            <input id="promoInput" type="text" placeholder="Введите промокод" style="flex:1;min-width:120px">
+            <button class="btn" id="btnPromo">Активировать</button>
+          </div>
+          <div class="tiny muted" style="margin-top:8px">Промокод: newtarobot (+5).</div>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="card pad" id="reviews-block" style="margin-top:12px">
+        <h2>Отзывы</h2>
+        <div class="rev-slider" id="revSlider">
+          <div class="rev"> <img src="https://i.pravatar.cc/120?img=15" alt="Анна"/> <div> <div class="starline">★★★★★</div> <div>«Классные расклады, в точку!»</div> <div class="tiny muted">Анна</div> </div> </div>
+          <div class="rev"> <img src="https://i.pravatar.cc/120?img=12" alt="Дмитрий"/> <div> <div class="starline">★★★★★</div> <div>«Визуал огонь, удобно и быстро.»</div> <div class="tiny muted">Дмитрий</div> </div> </div>
+          <div class="rev"> <img src="https://i.pravatar.cc/120?img=31" alt="Марина"/> <div> <div class="starline">★★★★★</div> <div>«Карта дня — мой ритуал.»</div> <div class="tiny muted">Марина</div> </div> </div>
+        </div>
+      </div>
+      
+      <div class="footnote">Списания: Карта дня 1, 3 карты 3, Неделя 5, Да/Нет 5. Конструктор 3. Гороскоп бесплатно. ИИ‑чат — 1 за сообщение.</div>
+    </section>
+
+    <!-- Page: Horoscope -->
+    <section class="page" id="page-horoscope">
+      <div class="card pad">
+        <h2 style="display:flex;align-items:center;gap:10px"><span style="filter:drop-shadow(0 0 10px rgba(255,106,213,.6))">✨</span>Гороскоп на сегодня</h2>
+        <div class="zodiac-grid" id="zGrid" style="margin-top:10px"></div>
+        <div class="footnote">Гороскоп генерирует ИИ ежедневно; бесплатно.</div>
+      </div>
+    </section>
+
+    <!-- Page: AI -->
+    <section class="page" id="page-ai">
+      <div class="card pad">
+        <h2>ИИ Чат с тарологом</h2>
+        <div class="muted tiny">Задайте вопрос, пообщайтесь или попросите сделать расклад (например, "сделай расклад на отношения").</div>
+        <div class="chat" id="chat"></div>
+        <div class="inputRow">
+          <input id="aiInput" type="text" placeholder="Ваш вопрос...">
+          <button class="btn primary" id="aiSend">Спросить</button>
+        </div>
+      </div>
+    </section>
+  </div> <!-- .wrap ends -->
+
+  <!-- Нижний бар для кнопок -->
+  <div class="bottom-bar">
+    <div class="support-wrapper">
+      <button class="btn ghost support-btn" id="headerSupportBtn" title="Тех. поддержка">
+        <div class="support-icon">
+          <div class="support-icon-question-mark">?</div>
+          <div class="support-icon-pulse"></div>
+        </div>
+      </button>
+      <div class="support-text">тех.поддержка</div>
+    </div>
+    <div class="balance-display pill">🔮 <span id="balanceValue">—</span></div>
+    <button class="btn" id="btnTopup">Пополнить</button>
+  </div>
+
+  <!-- Shop Sheet -->
+  <div class="sheet" id="shop">
+    <div class="box">
+      <div class="row" style="justify-content:space-between"> <h3 style="margin:0">Купить сообщения</h3> <button class="btn ghost" id="shopClose">Закрыть</button> </div>
+      <div class="packs" style="margin-top:10px">
+        <div class="pack"><div><span class="pill">20 сообщений</span></div><div class="muted">69 ₽</div><div><button class="btn primary buy" data-qty="20">Купить</button></div></div>
+        <div class="pack"><div><span class="pill">50 сообщений</span></div><div class="muted">149 ₽</div><div><button class="btn primary buy" data-qty="50">Купить</button></div></div>
+        <div class="pack"><div><span class="pill">100 сообщений</span></div><div class="muted">249 ₽</div><div><button class="btn primary buy" data-qty="100">Купить</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Modal -->
+  <div class="modal" id="modal">
+    <div class="inner">
+      <div class="row" style="justify-content:space-between;align-items:center"> <h3 id="modalTitle" style="margin:0">Результат</h3> <button class="btn ghost" id="modalClose">Закрыть</button> </div>
+      <div id="modalBody" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- Loaders -->
+  <div class="loader" id="loader" aria-hidden="true"><div class="loader-wrap"><div class="deck"><span class="card c1"></span><span class="card c2"></span><span class="card c3"></span></div><div class="loader-text" id="loaderText">Колода тасуется…</div></div></div>
+  <div class="loader" id="horoscope-loader" aria-hidden="true"><div class="loader-wrap"><div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="loader-text">Считываем звезды!</div></div></div>
+  
+  <div class="footnote" id="dbg"></div>
+
+  <!-- ИЗМЕНЕНИЕ №2: Путь и версия обновлены для сброса кэша скрипта -->
+  <script src="/app.js?v=1.7"></script>
+</body>
+</html>
+
